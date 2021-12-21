@@ -5,7 +5,7 @@ LABEL maintainer='Jonas Crecencio <jonascrecencio.silva@gmail.com>'
 WORKDIR /app
 
 COPY requirements.txt /app
-COPY core/app.py /app
+COPY app.py /app
 
 RUN pip3 install -r requirements.txt
 

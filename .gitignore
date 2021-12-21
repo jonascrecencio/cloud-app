@@ -1,0 +1,5 @@
+.terraform*
+*.swp
+*.bak
+*.back
+*.backup
