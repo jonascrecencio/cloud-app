@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  build-hello-world-image:
+  hello-world-image:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -17,5 +17,4 @@ jobs:
       - run: cd src/app-core/
       - run: docker pull 481676519499.dkr.ecr.us-east-1.amazonaws.com/app-core || true
       - run: docker build --file $GITHUB_WORKSPACE/docker/app-core/Dockerfile --cache-from 481676519499.dkr.ecr.us-east-1.amazonaws.com/app-core -t tmp .
-  publish-hello-world-image:
       - run: docker push 481676519499.dkr.ecr.us-east-1.amazonaws.com/app-core
