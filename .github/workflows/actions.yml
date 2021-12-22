@@ -5,7 +5,7 @@ jobs:
   check-aws-cli-version:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      #- uses: actions/checkout@v2
       - run: echo hello-world
       - run: cat $GITHUB_WORKSPACE/README.md
       - run: aws --version
