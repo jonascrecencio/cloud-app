@@ -1,0 +1,21 @@
+name: Deploy Hello World
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  build-hello-world-image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: aws ecr get-login-password | docker login --username AWS --password-stdin 481676519499.dkr.ecr.us-east-1.amazonaws.com
+      - run: cd src/app-core/
+      - run: docker pull 481676519499.dkr.ecr.us-east-1.amazonaws.com/app-core || true
+      - run: docker build --file $GITHUB_WORKSPACE/docker/app-core/Dockerfile --cache-from 481676519499.dkr.ecr.us-east-1.amazonaws.com/app-core -t tmp .
+  publish-hello-world-image:
+      - run: docker push 481676519499.dkr.ecr.us-east-1.amazonaws.com/app-core
