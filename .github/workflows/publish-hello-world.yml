@@ -12,7 +12,7 @@ jobs:
   hello-world-image:
     runs-on: ubuntu-latest
     env:
-      AWS-ECR-URI: 481676519499.dkr.ecr.us-east-1.amazonaws.com
+      AWS-ECR-URI: ${{ secrets.AWS_ECR_URI }}
       AWS-REGION: us-east-1
       DOCKER_IMAGE: ${{ AWS-ECR-URI }}/app-core
     steps:
