@@ -23,21 +23,10 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS-REGION }}
-      - name: Terraform init
-        uses: hashicorp/setup-terraform@v1
-        with:
-          tf_actions_subcommand: 'init'
-          tf_actions_working_dir: 'terraform'
-      - name: Terraform plan
-        uses: hashicorp/setup-terraform@v1
-        with:
-          tf_actions_subcommand: 'plan'
-          tf_actions_working_dir: 'terraform'
-      - name: terraform apply
-        uses: hashicorp/setup-terraform@v1
-        with:
-          tf_actions_subcommand: 'apply'
-          tf_actions_working_dir: 'terraform'
+      - uses: hashicorp/setup-terraform@v1
+      - run: terraform init
+      - run: terraform plan
+      - run: terraform apply
   hello-world-image:
     runs-on: ubuntu-latest
     env:
