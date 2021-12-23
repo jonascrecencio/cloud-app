@@ -48,7 +48,8 @@ jobs:
         uses: docker/login-action@v1
         with:
           registry: ${{ env.AWS-ECR-URI }}
-      - run: cd $GITHUB_WORKSPACE/src/app-core/
-      - run: docker pull ${{ env.DOCKER_IMAGE }} || true
-      - run: docker build --file $GITHUB_WORKSPACE/docker/app-core/Dockerfile --cache-from ${{ env.DOCKER_IMAGE }} -t ${{ env.DOCKER_IMAGE }} .
-      - run: docker push ${{ env.DOCKER_IMAGE }}
+      - run: |
+          cd $GITHUB_WORKSPACE/src/app-core/
+          docker pull ${{ env.DOCKER_IMAGE }} || true
+          docker build --file $GITHUB_WORKSPACE/docker/app-core/Dockerfile --cache-from ${{ env.DOCKER_IMAGE }} -t ${{ env.DOCKER_IMAGE }} .
+          docker push ${{ env.DOCKER_IMAGE }}
