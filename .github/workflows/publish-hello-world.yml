@@ -24,10 +24,11 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS-REGION }}
       - uses: hashicorp/setup-terraform@v1
-      - run: cd $GITHUB_WORKSPACE/terraform/
-      - run: terraform init
-      - run: terraform plan
-      - run: terraform apply
+      - run: |
+          cd $GITHUB_WORKSPACE/terraform/
+          terraform init
+          terraform plan
+          terraform apply
   hello-world-image:
     runs-on: ubuntu-latest
     env:
