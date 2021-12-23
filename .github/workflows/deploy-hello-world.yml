@@ -1,0 +1,53 @@
+name: Deploy Hello World
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  aws-ecr-repository:
+    name: Deploy ECR repository
+    runs-on: ubuntu-latest
+    env:
+      AWS-REGION: us-east-1
+    steps:
+      - name: Fetch github repository
+        uses: actions/checkout@v2
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS-REGION }}
+      - uses: hashicorp/setup-terraform@v1
+      - run: |
+          cd $GITHUB_WORKSPACE/terraform/
+          terraform init
+          terraform plan
+          terraform apply
+  hello-world-image:
+    needs: aws-ecr-repository
+    runs-on: ubuntu-latest
+    env:
+      AWS-ECR-URI: ${{ secrets.AWS_ECR_URI }}
+      AWS-REGION: us-east-1
+      DOCKER_IMAGE: ${{ secrets.AWS_ECR_URI }}/app-core
+    steps:
+      - name: Fetch github repository
+        uses: actions/checkout@v2
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS-REGION }}
+      - name: AWS ECR docker login
+        uses: docker/login-action@v1
+        with:
+          registry: ${{ env.AWS-ECR-URI }}
+      - run: |
+          cd $GITHUB_WORKSPACE/src/app-core/
+          docker pull ${{ env.DOCKER_IMAGE }} || true
+          docker build --file $GITHUB_WORKSPACE/docker/app-core/Dockerfile --cache-from ${{ env.DOCKER_IMAGE }} -t ${{ env.DOCKER_IMAGE }} .
+          docker push ${{ env.DOCKER_IMAGE }}
