@@ -30,6 +30,7 @@ jobs:
           terraform plan
           terraform apply
   hello-world-image:
+    needs: aws-ecr-repository
     runs-on: ubuntu-latest
     env:
       AWS-ECR-URI: ${{ secrets.AWS_ECR_URI }}
