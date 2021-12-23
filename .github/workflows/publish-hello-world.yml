@@ -12,6 +12,8 @@ jobs:
   aws-ecr-repository:
     name: Deploy ECR repository
     runs-on: ubuntu-latest
+    env:
+      AWS-REGION: us-east-1
     steps:
       - name: Fetch github repository
         uses: actions/checkout@v2
