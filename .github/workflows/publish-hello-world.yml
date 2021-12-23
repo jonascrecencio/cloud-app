@@ -29,6 +29,6 @@ jobs:
         with:
           registry: ${{ env.AWS-ECR-URI }}
       - run: cd src/app-core/
-      - run: docker pull ${{ env.AWS-ECR-URI }}/app-core || true
+      - run: docker pull ${{ env.DOCKER_IMAGE }} || true
       - run: docker build --file $GITHUB_WORKSPACE/docker/app-core/Dockerfile --cache-from ${{ env.DOCKER_IMAGE }} -t ${{ env.DOCKER_IMAGE }} .
       - run: docker push ${{ env.DOCKER_IMAGE }}
